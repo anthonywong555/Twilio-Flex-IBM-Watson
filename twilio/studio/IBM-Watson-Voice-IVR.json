@@ -1,0 +1,344 @@
+{
+    "description": "IBM Watson Voice IVR Flow",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "InitialState",
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": 10
+          },
+          "flow_url": "https://webhooks.twilio.com/v1/Accounts/ACbc34a3f8376a788060ecdb9f25cb5881/Flows/FWc39369d0779e934f24dd7e8d377e11bb"
+        },
+        "transitions": [
+          {
+            "event": "incomingMessage",
+            "conditions": [],
+            "next": null,
+            "uuid": "95c70194-7b23-4f9b-a660-217210a258fb"
+          },
+          {
+            "event": "incomingCall",
+            "conditions": [],
+            "next": "FF6e09efaf4f4ffb4e9e614fb0d0e51c1a",
+            "uuid": "862dd498-92f3-4742-965c-a21ca3c394ff"
+          },
+          {
+            "event": "incomingRequest",
+            "conditions": [],
+            "next": null,
+            "uuid": "533575e8-eff5-47c2-83e9-74c93513fd25"
+          }
+        ],
+        "sid": "FF6f59aea029c07e801ce1911b57239759"
+      },
+      {
+        "name": "SetVariables",
+        "type": "SetVariables",
+        "properties": {
+          "offset": {
+            "x": 100,
+            "y": 700
+          },
+          "variables": [
+            {
+              "key": "sessionId",
+              "value": "{{widgets.Send-To-Bot.parsed.sessionId}}",
+              "index": "0"
+            },
+            {
+              "key": "botMessage",
+              "value": "{{widgets.Send-To-Bot.parsed.botMessage}}",
+              "index": "1"
+            }
+          ]
+        },
+        "transitions": [
+          {
+            "event": "next",
+            "conditions": [],
+            "next": "FFe0701acaffc24c3579343a8763bd4111",
+            "uuid": "ab9edd74-7aa2-46cf-82be-35bdd874693c"
+          }
+        ],
+        "sid": "FFe9b0dac54b2cf3fc4fa9dbf343504a02"
+      },
+      {
+        "name": "Send-To-Bot",
+        "type": "Function",
+        "properties": {
+          "offset": {
+            "x": 80,
+            "y": 320
+          },
+          "url": "https://corn-reindeer-3321.twil.io/ibm-watson",
+          "timeout": null,
+          "parameters": [
+            {
+              "key": "message",
+              "value": "{{flow.variables.message}}"
+            },
+            {
+              "key": "sessionId",
+              "value": "{{flow.variables.sessionId}}"
+            }
+          ],
+          "service_sid": null,
+          "function_sid": null,
+          "environment_sid": null
+        },
+        "transitions": [
+          {
+            "event": "success",
+            "conditions": [],
+            "next": "FFe9b0dac54b2cf3fc4fa9dbf343504a02",
+            "uuid": "22f852e5-1ef9-4d26-a632-d949a150bce7"
+          },
+          {
+            "event": "fail",
+            "conditions": [],
+            "next": "FF09334dd0a4da725161c378e5c3c4ddbf",
+            "uuid": "7ffeb03b-dacf-46f0-a997-04f4877a4b5c"
+          }
+        ],
+        "sid": "FF583cb47b858aa8db70ac7144782174ae"
+      },
+      {
+        "name": "IsTransfer",
+        "type": "Branch",
+        "properties": {
+          "offset": {
+            "x": -40,
+            "y": 1110
+          },
+          "input": "{{flow.variables.botMessage}}"
+        },
+        "transitions": [
+          {
+            "event": "noMatch",
+            "conditions": [],
+            "next": "FF02cae3439a99d66eaddceec092f296ac",
+            "uuid": "54458b7e-f430-4c67-8f74-de66bea46d9f"
+          },
+          {
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "If value contains Transferring",
+                "type": "contains",
+                "arguments": [
+                  "{{flow.variables.botMessage}}"
+                ],
+                "value": "Transferring"
+              }
+            ],
+            "next": "FF09334dd0a4da725161c378e5c3c4ddbf",
+            "uuid": "1b13279a-ff64-4458-86a5-76817076d655"
+          },
+          {
+            "event": "match",
+            "conditions": [
+              {
+                "friendly_name": "If value contains transfer",
+                "type": "contains",
+                "arguments": [
+                  "{{flow.variables.botMessage}}"
+                ],
+                "value": "transfer"
+              }
+            ],
+            "next": "FF09334dd0a4da725161c378e5c3c4ddbf",
+            "uuid": "af2db861-c4b8-43e6-a6fd-95044490e8e4"
+          }
+        ],
+        "sid": "FFe0701acaffc24c3579343a8763bd4111"
+      },
+      {
+        "name": "SetCustomerMessageGreeting",
+        "type": "SetVariables",
+        "properties": {
+          "offset": {
+            "x": 680,
+            "y": 300
+          },
+          "variables": [
+            {
+              "key": "message",
+              "value": "Hi",
+              "index": "0"
+            }
+          ]
+        },
+        "transitions": [
+          {
+            "event": "next",
+            "conditions": [],
+            "next": "FF583cb47b858aa8db70ac7144782174ae",
+            "uuid": "519a2daf-0ca3-4fb7-97ee-b0aeebe9ced1"
+          }
+        ],
+        "sid": "FF6e09efaf4f4ffb4e9e614fb0d0e51c1a"
+      },
+      {
+        "name": "SetCustomerMessageSpeech",
+        "type": "SetVariables",
+        "properties": {
+          "offset": {
+            "x": 1010,
+            "y": 1380
+          },
+          "variables": [
+            {
+              "key": "message",
+              "value": "{{widgets.Send-Bot-Message.SpeechResult}}",
+              "index": "0"
+            }
+          ]
+        },
+        "transitions": [
+          {
+            "event": "next",
+            "conditions": [],
+            "next": "FF583cb47b858aa8db70ac7144782174ae",
+            "uuid": "d102aa36-9306-4fe5-ba5a-4dc131496e85"
+          }
+        ],
+        "sid": "FF9ffb16c8b16ab6d4146d3310f37ef48d"
+      },
+      {
+        "name": "send_to_flex_1",
+        "type": "SendToFlex",
+        "properties": {
+          "offset": {
+            "x": -837,
+            "y": 1032
+          },
+          "workflow": "WWb6562d08853de89bbc363aa7158bad33",
+          "channel": "TC635321595ed57117275f5ec5d292607f",
+          "attributes": "{\n\"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\",\"Bot\": {\n\"currentIntent\": \"{{widgets.Send-To-Bot.parsed.botIntent}} \",\n\"context\": \"{{widgets.Send-To-Bot.parsed.botContext}} \"\n}}",
+          "timeout": null,
+          "priority": null,
+          "waitUrl": null,
+          "waitUrlMethod": null
+        },
+        "transitions": [
+          {
+            "event": "callComplete",
+            "conditions": [],
+            "next": null,
+            "uuid": "6b4eacb6-57de-44f7-9776-864be58dc947"
+          },
+          {
+            "event": "failedToEnqueue",
+            "conditions": [],
+            "next": null,
+            "uuid": "251ad193-0086-4777-afad-69335c55090d"
+          },
+          {
+            "event": "callFailure",
+            "conditions": [],
+            "next": null,
+            "uuid": "f14877fe-d759-44ff-9d7e-4fe75495eee5"
+          }
+        ],
+        "sid": "FF8cb8f3e14560283ec7a04cc6de49167d"
+      },
+      {
+        "name": "Send-Bot-Message",
+        "type": "Gather",
+        "properties": {
+          "offset": {
+            "x": 830,
+            "y": 1160
+          },
+          "timeout": 5,
+          "finish_on_key": "#",
+          "stop_gather": true,
+          "number_of_digits": null,
+          "save_response_as": null,
+          "say": "{{flow.variables.botMessage}}",
+          "play": null,
+          "voice": null,
+          "language": null,
+          "loop": 1,
+          "hints": null,
+          "gather_language": "en",
+          "speech_timeout": "auto",
+          "speech_model": null,
+          "profanity_filter": "true"
+        },
+        "transitions": [
+          {
+            "event": "keypress",
+            "conditions": [],
+            "next": "FF96849f6096539f27b0ed0c15eebc82c2",
+            "uuid": "634604a0-d815-430c-94a8-178a0556e30f"
+          },
+          {
+            "event": "speech",
+            "conditions": [],
+            "next": "FF9ffb16c8b16ab6d4146d3310f37ef48d",
+            "uuid": "4af9b42d-1a7c-4bab-9132-ccb390eb4737"
+          },
+          {
+            "event": "timeout",
+            "conditions": [],
+            "next": null,
+            "uuid": "d5b3d2f5-e8c7-4038-9066-215f56669a43"
+          }
+        ],
+        "sid": "FF02cae3439a99d66eaddceec092f296ac"
+      },
+      {
+        "name": "SetCustomerMessageDTMF",
+        "type": "SetVariables",
+        "properties": {
+          "offset": {
+            "x": 660,
+            "y": 1390
+          },
+          "variables": [
+            {
+              "key": "message",
+              "value": "{{widgets.Send-Bot-Message.Digits}}"
+            }
+          ]
+        },
+        "transitions": [
+          {
+            "event": "next",
+            "conditions": [],
+            "next": "FF583cb47b858aa8db70ac7144782174ae",
+            "uuid": "bf7edea2-e890-48d0-aa2e-125558ffa62a"
+          }
+        ],
+        "sid": "FF96849f6096539f27b0ed0c15eebc82c2"
+      },
+      {
+        "name": "SendToAgent",
+        "type": "SayPlay",
+        "properties": {
+          "offset": {
+            "x": -399,
+            "y": 802
+          },
+          "say": "Please wait while we transfer you to the next available agent.",
+          "play": null,
+          "voice": null,
+          "language": null,
+          "loop": 1,
+          "digits": null
+        },
+        "transitions": [
+          {
+            "event": "audioComplete",
+            "conditions": [],
+            "next": "FF8cb8f3e14560283ec7a04cc6de49167d",
+            "uuid": "8cf94645-eaa5-4016-b9db-25079d995366"
+          }
+        ],
+        "sid": "FF09334dd0a4da725161c378e5c3c4ddbf"
+      }
+    ]
+  }

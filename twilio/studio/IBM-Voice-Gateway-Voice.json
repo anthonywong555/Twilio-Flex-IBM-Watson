@@ -1,0 +1,115 @@
+{
+    "description": "A New Flow",
+    "states": [
+      {
+        "name": "Trigger",
+        "type": "InitialState",
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": 0
+          },
+          "flow_url": "https://webhooks.twilio.com/v1/Accounts/ACa738028aae02db198568cffe60af8d88/Flows/FW7d75d97823fb07614e0a3f824050e6c6"
+        },
+        "transitions": [
+          {
+            "event": "incomingMessage",
+            "conditions": [],
+            "next": null,
+            "uuid": "2920f4d3-0234-4278-af30-bd6f96b74e6a"
+          },
+          {
+            "event": "incomingCall",
+            "conditions": [],
+            "next": "FF3360ad3a68798e4e39a827f0a58290e0",
+            "uuid": "81a554c1-2a1f-4646-b5db-867b4de34cca"
+          },
+          {
+            "event": "incomingRequest",
+            "conditions": [],
+            "next": null,
+            "uuid": "4f2d11da-746d-42ac-8d99-b231802884df"
+          }
+        ],
+        "sid": "FFd4347658dc030218804cb377d2f9d943"
+      },
+      {
+        "name": "send_to_flex_1",
+        "type": "SendToFlex",
+        "properties": {
+          "offset": {
+            "x": 0,
+            "y": 570
+          },
+          "workflow": "WW2cbbe1a9233d0df8fa1cfd6f62ba93dd",
+          "channel": "TCbc03ac7b3fd486f4ddd6dedae8b22eda",
+          "attributes": "{\n\"type\": \"inbound\", \"name\": \"{{trigger.call.From}}\",\"Bot\": {\n\"currentIntent\": \"{{widgets.IBM-Voice-Gateway-Driver.parsed.data.botIntent}} \",\n\"context\": \"{{widgets.IBM-Voice-Gateway-Driver.parsed.data.botContext}} \"\n}}",
+          "timeout": null,
+          "priority": null,
+          "waitUrl": null,
+          "waitUrlMethod": null
+        },
+        "transitions": [
+          {
+            "event": "callComplete",
+            "conditions": [],
+            "next": null,
+            "uuid": "eef2e0d0-0589-4812-8724-6c4eb269f77c"
+          },
+          {
+            "event": "failedToEnqueue",
+            "conditions": [],
+            "next": null,
+            "uuid": "41c52f3d-918c-4fa0-ba33-871b594229c2"
+          },
+          {
+            "event": "callFailure",
+            "conditions": [],
+            "next": null,
+            "uuid": "f71cf17f-31e7-4e49-897a-79ec7b5c0328"
+          }
+        ],
+        "sid": "FFd5ee412ab09266375578a85b68cbab24"
+      },
+      {
+        "name": "IBM-Voice-Gateway-Driver",
+        "type": "Function",
+        "properties": {
+          "offset": {
+            "x": 250,
+            "y": 260
+          },
+          "url": "https://wine-monkey-5974.twil.io/ibm-voice-gateway-driver",
+          "timeout": null,
+          "parameters": [
+            {
+              "key": "action",
+              "value": "GET_SYNC_AND_DELETE"
+            },
+            {
+              "key": "phoneNumber",
+              "value": "{{trigger.call.From}}"
+            }
+          ],
+          "service_sid": null,
+          "function_sid": null,
+          "environment_sid": null
+        },
+        "transitions": [
+          {
+            "event": "success",
+            "conditions": [],
+            "next": "FFd5ee412ab09266375578a85b68cbab24",
+            "uuid": "eb345697-8798-4c2a-b030-0b26bce0ac6b"
+          },
+          {
+            "event": "fail",
+            "conditions": [],
+            "next": "FFd5ee412ab09266375578a85b68cbab24",
+            "uuid": "28e2034b-21f6-4728-a3ac-aa96f27e3a39"
+          }
+        ],
+        "sid": "FF3360ad3a68798e4e39a827f0a58290e0"
+      }
+    ]
+  }
